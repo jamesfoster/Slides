@@ -20,53 +20,72 @@
 
 <div id="impress">
 
-    <div class="step slide" data-x="0" data-y="0" data-z="0">
-        <q>Hello</q>
+    <div id="title" class="step slide">
+        <h1>Hello</h1>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-400">
-        <q>My Name Is James</q>
+    <div class="step slide">
+        <p><br/><br/><br/>My Name Is James</p>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-800">
-        <q>Whoop yjghf jytf jyhtf hgf ghjf jhgf jhgf jh
- ff jhgf hjgf jhgf jhgf ghjf hjf 
-yug uyg kuyg kuyg kuyg kuygk uyg ku
-tuyg kuyguyg kuygk uyg</q>
+    <div class="step slide">
+        <p><br/><br/><br/>My Name Is Also James</p>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-1200">
+    <div class="step slide">
+        <p>I am:</p>
+        <ul>
+          <li>A .NET developer</li>
+          <li>A git <span class="delay">(scm) guru</span></li>
+          <li>An ASP Insider</li>
+          <li>A gamer</li>
+        </ul>
+    </div>
+
+    <div class="step slide">
         <q>Whoop</q>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-1600">
+    <div class="step slide">
         <q>Whoop</q>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-2000">
+    <div class="step slide">
         <q>Whoop</q>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-2400">
+    <div class="step slide">
         <q>Whoop</q>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-2800">
+    <div class="step slide">
         <q>Whoop</q>
     </div>
 
-    <div class="step slide" data-x="0" data-y="0" data-z="-3200">
-        <q>Whoop</q>
-    </div>
-
-    <div class="step slide" data-x="0" data-y="0" data-z="-3600">
-        <q>Whoop</q>
+    <div class="step slide">
+        <p><br/><br/><br/>The End</p>
     </div>
 
 </div>
 
+<script src="http://code.jquery.com/jquery.js"></script>
 <script src="../js/impress.js"></script>
-<script>impress().init();</script>
+<script>
+
+$(function(){
+
+  $('div.step').each(function(i, e){
+    $(e).attr({
+      'data-x': 0,
+      'data-y': 0,
+      'data-z': -500 * i,
+    });
+  });
+
+  impress().init();
+});
+
+</script>
 
 </body>
 </html>
