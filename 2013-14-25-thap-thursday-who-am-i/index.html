@@ -46,9 +46,13 @@
     <div id="side-step" class="step" data-x="2000" data-z="5000" data-rotate-y="30">
     </div>
 
-    <div class="step slide">
-        <q>Whoop</q>
+    <div class="step map" id="map" data-x="0" data-y="0" data-z="-1200">
+      <div id="map-canvas"></div>
     </div>
+
+    <div class="step map-part" id="map-home" data-x="0" data-y="0" data-z="-1200"></div>
+    <div class="step map-part" id="map-lived" data-x="0" data-y="0" data-z="-1200"></div>
+    <div class="step map-part" id="map-travelled" data-x="0" data-y="0" data-z="-1200"></div>
 
     <div class="step slide">
         <q>Whoop</q>
@@ -68,8 +72,9 @@
 
 </div>
 
-<script src="http://code.jquery.com/jquery.js"></script>
 <script src="../js/impress.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqJrZJsqFjDov8eh8whZdRUpEUrgjbx9Y&sensor=true"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 <script>
 
 $(function(){
@@ -124,7 +129,54 @@ $('#side-step')
   .on('impress:stepleave', function(e){
     clearInterval(sideTimer);
   })
-</script>
+  
+  
+  var map;
+  var home = new google.maps.LatLng(54.624297,-1.590974);
+  var lived = [
+    new google.maps.LatLng(54.624297,-1.590974),
+    new google.maps.LatLng(54.624297,-1.590974),
+    new google.maps.LatLng(54.624297,-1.590974),
+    new google.maps.LatLng(54.624297,-1.590974),
+  ]
+  var travelled = [
+    new google.maps.LatLng(54.624297,-1.590974),
+    new google.maps.LatLng(54.624297,-1.590974),
+    new google.maps.LatLng(54.624297,-1.590974),
+    new google.maps.LatLng(54.624297,-1.590974),
+  ]
+  var markers = [];
 
+  function clearMarkers() {
+    for(var i in markers) {
+      markers[i].setMap(null);
+    }
+    markers = [];
+  }
+
+  $(function(){
+    var mapOptions = {
+      center: home,
+      zoom: 18,
+      mapTypeId: google.maps.MapTypeId.HYBRID,
+      disableDefaultUI: true
+    };
+
+    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+  });
+
+  $('#map-home').on('impress:stepenter', function(){
+    markers.push(new google.maps.Marker ({
+      position: home,
+      map: map,
+      animation: google.maps.Animation.DROP
+    }));
+  });
+
+  $('#map-lived').on('impress:stepenter', function(){
+    clearMarkers();
+  });
+  
+</script>
 </body>
 </html>

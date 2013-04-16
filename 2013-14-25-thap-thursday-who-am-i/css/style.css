@@ -46,6 +46,17 @@ table {
 
 /*************************************/
 
+.step.map, #map-canvas {
+  width: 900px;
+  height: 700px;
+}
+
+body[class*=impress-on-map-] #map {
+  opacity: 1;
+}
+
+/*************************************/
+
 body {
     font-family: 'PT Sans', sans-serif;
     min-height: 740px;
@@ -86,7 +97,6 @@ i, em { font-style: italic }
 .step {
     position: relative;
     width: 900px;
-    padding: 40px;
     margin: 20px auto;
 
     -webkit-box-sizing: border-box;
