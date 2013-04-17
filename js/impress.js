@@ -103,6 +103,20 @@
         context = context || document;
         return arrayify( context.querySelectorAll(selector) );
     };
+
+    var nextSiblings = function(el, callback) {
+        while(el.nextElementSibling)
+        {
+            callback(el = el.nextElementSibling);
+        }
+    };
+
+    var previousSiblings = function(el, callback) {
+        while(el.previousElementSibling)
+        {
+            callback(el = el.previousElementSibling);
+        }
+    };
     
     // `triggerEvent` builds a custom DOM event with given `eventName` and `detail` data
     // and triggers it on element given as `el`.
@@ -579,19 +593,18 @@
         // animations when step is shown.
         root.addEventListener("impress:init", function(){
             // STEP CLASSES
-            steps.forEach(function (step) {
-                step.classList.add("future");
-            });
-            
             root.addEventListener("impress:stepenter", function (event) {
-                event.target.classList.remove("past");
-                event.target.classList.remove("future");
-                event.target.classList.add("present");
+                var current = event.target;
+                current.classList.remove("past");
+                current.classList.remove("future");
+                current.classList.add("present");
+                
+                nextSiblings(current, function(el){ el.classList.add("future") });
+                previousSiblings(current, function(el){ el.classList.add("past") });
             }, false);
-            
-            root.addEventListener("impress:stepleave", function (event) {
+
+            root.addEventListener("impress:stepenter", function (event) {
                 event.target.classList.remove("present");
-                event.target.classList.add("past");
             }, false);
             
         }, false);
@@ -606,7 +619,7 @@
             // scrolling to element in hash.
             //
             // And it has to be set after animation finishes, because in Chrome it
-            // makes transtion laggy.
+            // makes transition laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             root.addEventListener("impress:stepenter", function (event) {
                 window.location.hash = lastHash = "#/" + event.target.id;
