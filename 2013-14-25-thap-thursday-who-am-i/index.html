@@ -32,18 +32,18 @@
         <p><br/><br/><br/>My Name Is Also James</p>
     </div>
 
-    <div class="step slide">
+    <div id="i-am" class="step slide">
         <p>I am:</p>
         <ul>
           <li>A .NET developer</li>
-          <li>A git <span class="delay">(scm) guru</span></li>
+          <li>A git <span class="delay">guru</span></li>
           <li>An ASP Insider</li>
           <li>A gamer</li>
+          <li>A tinker<span class="delay">er</span></li>
         </ul>
     </div>
 
-    <div class="step slide">
-        <q>Whoop</q>
+    <div id="side-step" class="step" data-x="2000" data-z="5000" data-rotate-y="30">
     </div>
 
     <div class="step slide">
@@ -75,16 +75,55 @@
 $(function(){
 
   $('div.step').each(function(i, e){
+    var data = e.dataset;
     $(e).attr({
-      'data-x': 0,
-      'data-y': 0,
-      'data-z': -500 * i,
+      'data-x': data.x || 0,
+      'data-y': data.y || 0,
+      'data-z': (data.z || 0) - (800 * i),
     });
   });
 
   impress().init();
 });
 
+$('#i-am').on('impress:stepenter', function(e){
+  var list = $("li, .delay", e.target);
+  
+  var time = 0;
+  for(var i = 0; i < list.size(); i++)
+  {
+    time += i == 0 ? 0 : list.eq(i).is('.delay') ? 1000 : 4000;
+    
+    (function(el, delay) {
+      setTimeout(function(){
+        el.css('opacity', '1');
+      }, delay);
+    })(list.eq(i), time);
+  }
+})
+
+var sideTimer;
+$('#side-step')
+  .on('impress:stepenter', function(e){
+    var root = $('#impress > div');
+    var el = e.target;
+    
+    sideTimer = setInterval(function(){
+      var data = el.dataset;
+      $(el).attr({
+        'data-x': Number(data.x||0) + 200*(Math.random() - 0.5),
+        'data-y': Number(data.y||0) + 100*(Math.random() - 0.5),
+        'data-z': Number(data.z||0) + 300*(Math.random() - 0.5),
+        'data-rotate-x': Number(data.rotateX||0) + 3*(Math.random() - 0.5),
+        'data-rotate-y': Number(data.rotateY||0) + 3*(Math.random() - 0.5),
+        'data-rotate-z': Number(data.rotateZ||0) + 3*(Math.random() - 0.5)
+      });
+      impress().goto(el);
+    },500)
+  })
+  .on('impress:stepleave', function(e){
+    clearInterval(sideTimer);
+  })
 </script>
 
 </body>

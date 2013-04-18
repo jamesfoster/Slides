@@ -450,6 +450,8 @@
             //
             // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
             window.scrollTo(0, 0);
+
+            initStep(el);
             
             var step = stepsData["impress-" + el.id];
             
@@ -599,11 +601,17 @@
                 current.classList.remove("future");
                 current.classList.add("present");
                 
-                nextSiblings(current, function(el){ el.classList.add("future") });
-                previousSiblings(current, function(el){ el.classList.add("past") });
+                nextSiblings(current, function(el){
+                    el.classList.add("future");
+                    el.classList.remove("past");
+                });
+                previousSiblings(current, function(el){
+                    el.classList.remove("future");
+                    el.classList.add("past");
+                });
             }, false);
 
-            root.addEventListener("impress:stepenter", function (event) {
+            root.addEventListener("impress:stepleave", function (event) {
                 event.target.classList.remove("present");
             }, false);
             
