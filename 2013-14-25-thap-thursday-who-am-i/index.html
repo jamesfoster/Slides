@@ -259,9 +259,7 @@ $('.list').on('impress:stepenter', function(e){
   
   function calcRoute(start, stop) {
 
-    if(directionsDisplay) {
-      directionsDisplay.setMap(null);
-    }
+    clearMarkers();
     directionsDisplay = new google.maps.DirectionsRenderer();
     directionsDisplay.setMap(map);
     
