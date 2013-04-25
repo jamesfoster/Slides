@@ -32,7 +32,7 @@
         <p><br/><br/><br/>My Name Is Also James</p>
     </div>
 
-    <div id="i-am" class="step slide">
+    <div class="step slide list">
         <p>I am:</p>
         <ul>
           <li>A .NET developer</li>
@@ -43,32 +43,45 @@
         </ul>
     </div>
 
-    <div id="side-step" class="step" data-x="2000" data-z="5000" data-rotate-y="30">
+    <div id="side-step" class="step" data-x="1000" data-z="4000" data-rotate-y="20">
     </div>
 
-    <div class="step map" id="map" data-x="0" data-y="0" data-z="-1200">
+    <div class="step slide list">
+        <p>I like to:</p>
+        <ul>
+          <li>cook</li>
+          <li>explore</li>
+          
+        </ul>
+    </div>
+
+    <div class="step map" id="map">
       <div id="map-canvas"></div>
     </div>
 
-    <div class="step map-part" id="map-home" data-x="0" data-y="0" data-z="-1200"></div>
-    <div class="step map-part" id="map-lived" data-x="0" data-y="0" data-z="-1200"></div>
-    <div class="step map-part" id="map-travelled" data-x="0" data-y="0" data-z="-1200"></div>
-
-    <div class="step slide">
-        <q>Whoop</q>
-    </div>
-
-    <div class="step slide">
-        <q>Whoop</q>
-    </div>
-
-    <div class="step slide">
-        <q>Whoop</q>
-    </div>
+    <div class="step map-part part" id="map-home"></div>
+    <div class="step map-part part" id="map-lived"></div>
+    <div class="step map-part part" id="map-lived2"></div>
+    <div class="step map-part part" id="map-golf"></div>
+    <div class="step map-part part" id="map-travelled1"></div>
+    <div class="step map-part part" id="map-travelled2"></div>
+    <div class="step map-part part" id="map-travelled3"></div>
 
     <div class="step slide">
         <p><br/><br/><br/>The End</p>
     </div>
+    
+    <div class="step img"><img src="img/01.jpg" /></div>
+    <div class="step img"><img src="img/02.jpg" /></div>
+    <div class="step img"><img src="img/03.jpg" /></div>
+    <div class="step img"><img src="img/04.jpg" /></div>
+    <div class="step img"><img src="img/05.jpg" /></div>
+    <div class="step img"><img src="img/06.jpg" /></div>
+    <div class="step img"><img src="img/07.jpg" /></div>
+    <div class="step img"><img src="img/08.jpg" /></div>
+    <div class="step img"><img src="img/09.jpg" /></div>
+    <div class="step img"><img src="img/10.jpg" /></div>
+    <div class="step img"><img src="img/11.jpg" /></div>
 
 </div>
 
@@ -79,19 +92,28 @@
 
 $(function(){
 
-  $('div.step').each(function(i, e){
-    var data = e.dataset;
-    $(e).attr({
-      'data-x': data.x || 0,
-      'data-y': data.y || 0,
-      'data-z': (data.z || 0) - (800 * i),
+  var steps = $('div.step');
+  
+  var z = 0;
+  for(var i = 0; i < steps.size(); i++)
+  {
+    var el = steps.eq(i);
+    
+    z += i == 0 || el.is('.part') ? 0 : 800;
+    
+    var data = steps.get(i).dataset;
+    
+    el.attr({
+      'data-x': Number(data.x || 0),
+      'data-y': Number(data.y || 0),
+      'data-z': Number(data.z || 0) - z,
     });
-  });
+  }
 
   impress().init();
 });
 
-$('#i-am').on('impress:stepenter', function(e){
+$('.list').on('impress:stepenter', function(e){
   var list = $("li, .delay", e.target);
   
   var time = 0;
@@ -106,45 +128,56 @@ $('#i-am').on('impress:stepenter', function(e){
     })(list.eq(i), time);
   }
 })
-
-var sideTimer;
-$('#side-step')
-  .on('impress:stepenter', function(e){
-    var root = $('#impress > div');
-    var el = e.target;
-    
-    sideTimer = setInterval(function(){
-      var data = el.dataset;
-      $(el).attr({
-        'data-x': Number(data.x||0) + 200*(Math.random() - 0.5),
-        'data-y': Number(data.y||0) + 100*(Math.random() - 0.5),
-        'data-z': Number(data.z||0) + 300*(Math.random() - 0.5),
-        'data-rotate-x': Number(data.rotateX||0) + 3*(Math.random() - 0.5),
-        'data-rotate-y': Number(data.rotateY||0) + 3*(Math.random() - 0.5),
-        'data-rotate-z': Number(data.rotateZ||0) + 3*(Math.random() - 0.5)
-      });
-      impress().goto(el);
-    },500)
-  })
-  .on('impress:stepleave', function(e){
-    clearInterval(sideTimer);
-  })
   
   
   var map;
-  var home = new google.maps.LatLng(54.624297,-1.590974);
+  var home = new google.maps.LatLng(54.624098,-1.590885);
   var lived = [
-    new google.maps.LatLng(54.624297,-1.590974),
-    new google.maps.LatLng(54.624297,-1.590974),
-    new google.maps.LatLng(54.624297,-1.590974),
-    new google.maps.LatLng(54.624297,-1.590974),
+    home,
+    new google.maps.LatLng(54.630521,-1.5739),
+    new google.maps.LatLng(54.632914,-1.559439),
+    new google.maps.LatLng(54.62632,-1.579794),
+    new google.maps.LatLng(54.612933,-1.570197)
+  ];
+  var lived2 = lived.concat([
+    new google.maps.LatLng(54.662731,-1.549233)
+  ]);
+  var golf = [
+    new google.maps.LatLng(54.638293,-1.574703),
+    new google.maps.LatLng(54.644036,-1.573845)
   ]
-  var travelled = [
-    new google.maps.LatLng(54.624297,-1.590974),
-    new google.maps.LatLng(54.624297,-1.590974),
-    new google.maps.LatLng(54.624297,-1.590974),
-    new google.maps.LatLng(54.624297,-1.590974),
-  ]
+  
+  var travelled1 = [
+    new google.maps.LatLng(57.505496,-1.796265),
+    new google.maps.LatLng(55.861441,-4.265442),
+    new google.maps.LatLng(55.956888,-3.186035),
+    new google.maps.LatLng(54.584797,-5.932617),
+    new google.maps.LatLng(54.971308,-1.604004),
+    new google.maps.LatLng(54.756331,-1.582031),
+    new google.maps.LatLng(51.51558,-0.131836),
+    new google.maps.LatLng(48.821333,2.351074),
+    new google.maps.LatLng(39.563353,2.658691),
+    new google.maps.LatLng(41.343825,2.15332),
+    new google.maps.LatLng(50.050085,14.436035),
+    new google.maps.LatLng(50.064192,19.951172),
+    new google.maps.LatLng(50.03454,19.180927),
+    new google.maps.LatLng(50.03454,19.180927),
+    new google.maps.LatLng(43.201172,27.89978),
+    new google.maps.LatLng(41.877741,12.502441),
+    new google.maps.LatLng(56.944974,24.11499)
+  ];
+  
+  var travelled2 = travelled1.concat([
+    new google.maps.LatLng(34.370645,132.473145),
+    new google.maps.LatLng(34.692509,135.501938),
+    new google.maps.LatLng(35.003003,135.769043),
+    new google.maps.LatLng(35.675147,139.713135),
+    new google.maps.LatLng(22.325306,114.169235)
+  ]);
+  var travelled3 = travelled2.concat([
+    new google.maps.LatLng(47.614496,-122.283325)
+  ]);
+  
   var markers = [];
 
   function clearMarkers() {
@@ -154,28 +187,84 @@ $('#side-step')
     markers = [];
   }
 
+  function loadMarkers(locations, clear, display) {
+    var bounds = new google.maps.LatLngBounds();
+
+    var time = 0;
+
+    clear = clear || clear === undefined;
+    display = display || display === undefined;
+
+    if(clear)
+    {
+      clearMarkers();
+    }
+
+    for(var i in locations)
+    {
+      bounds.extend(locations[i]);
+
+      if(!display) continue;
+      var existing = markers.filter(function(m){return m.position == locations[i]});
+      if(existing.length) continue;
+
+      time += i == 0 ? 400 : 200;
+      (function(location, delay) {
+        setTimeout(function(){
+          var marker = new google.maps.Marker ({
+            position: location,
+            map: map,
+            animation: google.maps.Animation.DROP
+          });
+
+          markers.push(marker);
+        }, delay);
+      })(locations[i], time);
+    }
+
+    // bounds = fixDateLine(bounds)
+
+    map.fitBounds(bounds);
+  }
+
+  function fixDateLine(bounds) {
+    var sw = bounds.getSouthWest();
+    var ne = bounds.getNorthEast();
+    var n = ne.lat();
+    var e = ne.lng();
+    var s = sw.lat();
+    var w = sw.lng();
+    
+    if(w > e)
+    {
+      bounds = new google.maps.LatLngBounds();
+      
+      bounds.extend(new google.maps.LatLng(n, e-179));
+      bounds.extend(new google.maps.LatLng(s, w-179));
+    }
+    
+    return bounds;
+  }
+
   $(function(){
     var mapOptions = {
       center: home,
       zoom: 18,
+      maxZoom: 18,
       mapTypeId: google.maps.MapTypeId.HYBRID,
       disableDefaultUI: true
     };
 
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
   });
-
-  $('#map-home').on('impress:stepenter', function(){
-    markers.push(new google.maps.Marker ({
-      position: home,
-      map: map,
-      animation: google.maps.Animation.DROP
-    }));
-  });
-
-  $('#map-lived').on('impress:stepenter', function(){
-    clearMarkers();
-  });
+  
+  $('#map-home').on('impress:stepenter', function(){ loadMarkers([home]); });
+  $('#map-lived').on('impress:stepenter', function(){ loadMarkers(lived, false); });  
+  $('#map-lived2').on('impress:stepenter', function(){ loadMarkers(lived2, false); });
+  $('#map-golf').on('impress:stepenter', function(){ loadMarkers(golf, true, false); });
+  $('#map-travelled1').on('impress:stepenter', function(){ loadMarkers(travelled1); });
+  $('#map-travelled2').on('impress:stepenter', function(){ loadMarkers(travelled2, false); });
+  $('#map-travelled3').on('impress:stepenter', function(){ loadMarkers(travelled3, false); });
   
 </script>
 </body>

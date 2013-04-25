@@ -55,6 +55,10 @@ body[class*=impress-on-map-] #map {
   opacity: 1;
 }
 
+#map.future {
+  opacity: 0.9;
+}
+
 /*************************************/
 
 body {
@@ -175,7 +179,7 @@ i, em { font-style: italic }
   padding-top: 50px;
 }
 
-#i-am li, .delay {
+.list li, .delay {
     opacity: 0;
 
     -webkit-transition: opacity 1s;
@@ -184,3 +188,13 @@ i, em { font-style: italic }
     -o-transition:      opacity 1s;
     transition:         opacity 1s;
 }
+
+
+.step.img {
+  width: 1500px;
+  text-align: center;
+}
+.step.img img {
+  height: 800px;
+}
+
