@@ -49,9 +49,9 @@
     <div class="step slide list">
         <p>I like to:</p>
         <ul>
-          <li>cook</li>
-          <li>explore</li>
-          
+          <li>Learn</li>
+          <li>Explore</li>
+          <li>Cook</li>
         </ul>
     </div>
 
@@ -63,6 +63,9 @@
     <div class="step map-part part" id="map-lived"></div>
     <div class="step map-part part" id="map-lived2"></div>
     <div class="step map-part part" id="map-golf"></div>
+    <div class="step map-part part" id="map-old-work"></div>
+    <div class="step map-part part" id="map-old-work-route"></div>
+    <div class="step map-part part" id="map-work-route"></div>
     <div class="step map-part part" id="map-travelled1"></div>
     <div class="step map-part part" id="map-travelled2"></div>
     <div class="step map-part part" id="map-travelled3"></div>
@@ -119,7 +122,7 @@ $('.list').on('impress:stepenter', function(e){
   var time = 0;
   for(var i = 0; i < list.size(); i++)
   {
-    time += i == 0 ? 0 : list.eq(i).is('.delay') ? 1000 : 4000;
+    time += i == 0 ? 0 : list.eq(i).is('.delay') ? 3000 : 10000;
     
     (function(el, delay) {
       setTimeout(function(){
@@ -128,10 +131,11 @@ $('.list').on('impress:stepenter', function(e){
     })(list.eq(i), time);
   }
 })
-  
-  
+
   var map;
   var home = new google.maps.LatLng(54.624098,-1.590885);
+  var oldWork = new google.maps.LatLng(54.624655,-1.64252);
+  var work = new google.maps.LatLng(54.579984,-1.235651);
   var lived = [
     home,
     new google.maps.LatLng(54.630521,-1.5739),
@@ -185,6 +189,10 @@ $('.list').on('impress:stepenter', function(e){
       markers[i].setMap(null);
     }
     markers = [];
+    
+    if(directionsDisplay) {
+      directionsDisplay.setMap(null);
+    }
   }
 
   function loadMarkers(locations, clear, display) {
@@ -245,6 +253,32 @@ $('.list').on('impress:stepenter', function(e){
     
     return bounds;
   }
+  
+  var directionsService = new google.maps.DirectionsService();
+  var directionsDisplay;
+  
+  function calcRoute(start, stop) {
+
+    if(directionsDisplay) {
+      directionsDisplay.setMap(null);
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay.setMap(map);
+    
+  
+    var request = {
+      origin: start,
+      destination: stop,
+      travelMode: google.maps.TravelMode.DRIVING,
+      provideRouteAlternatives: true
+    };
+    
+    directionsService.route(request, function(result, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(result);
+      }
+    });
+  }
 
   $(function(){
     var mapOptions = {
@@ -262,6 +296,9 @@ $('.list').on('impress:stepenter', function(e){
   $('#map-lived').on('impress:stepenter', function(){ loadMarkers(lived, false); });  
   $('#map-lived2').on('impress:stepenter', function(){ loadMarkers(lived2, false); });
   $('#map-golf').on('impress:stepenter', function(){ loadMarkers(golf, true, false); });
+  $('#map-old-work').on('impress:stepenter', function(){ loadMarkers([oldWork]); });
+  $('#map-old-work-route').on('impress:stepenter', function(){ calcRoute(home, oldWork); });
+  $('#map-work-route').on('impress:stepenter', function(){ calcRoute(home, work); });
   $('#map-travelled1').on('impress:stepenter', function(){ loadMarkers(travelled1); });
   $('#map-travelled2').on('impress:stepenter', function(){ loadMarkers(travelled2, false); });
   $('#map-travelled3').on('impress:stepenter', function(){ loadMarkers(travelled3, false); });
